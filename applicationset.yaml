@@ -24,9 +24,11 @@ spec:
           targetRevision: HEAD
           helm:
             valueFiles:
-              - $values/values.yaml
-        - path: projects/{{.path.basename}}
-          repoURL: 'https://github.com/piomin/argocd-showcase.git'
+              - $values/projects/{{.path.basename}}/values.yaml
+            parameters:
+              - name: name
+                value: '{{.path.basename}}'
+        - repoURL: 'https://github.com/piomin/argocd-showcase.git'
           targetRevision: HEAD
           ref: values
       syncPolicy:
