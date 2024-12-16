@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: global-config
+spec:
+  goTemplate: true
+  generators:
+    - git:
+        repoURL: https://github.com/piomin/argocd-showcase.git
+        revision: HEAD
+        directories:
+          - path: projects/*
+  template:
+    metadata:
+      name: '{{.path.basename}}-config'
+    spec:
+      destination:
+        namespace: {{.path.basename}}
+        server: 'https://kubernetes.default.svc'
+      project: default
+      sources:
+        - path: projects/{{.path.basename}}
+          repoURL: 'https://github.com/piomin/argocd-showcase.git'
+          targetRevision: HEAD
+          helm:
+            valueFiles:
+              - values.yaml
+        - path: chart
+          repoURL: 'https://github.com/piomin/argocd-showcase.git'
+          targetRevision: HEAD
+          ref: values
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
