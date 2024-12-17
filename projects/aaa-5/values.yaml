@@ -1,0 +1,2 @@
+quotas:
+  memoryRequest: 8Gi
