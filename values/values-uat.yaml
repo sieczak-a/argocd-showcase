@@ -1,6 +1,6 @@
 image:
   repository: piomin/basic
-  tag: 1.0.0
+  tag: 1.0.3
 app:
   name: basic
   environment: uat
