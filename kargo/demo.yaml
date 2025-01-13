@@ -1,0 +1,189 @@
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Project
+metadata:
+  name: basic-demo
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: kargo-demo-repo
+  namespace: basic-demo
+  labels:
+    kargo.akuity.io/cred-type: git
+stringData:
+  repoURL: https://github.com/piomin/argocd-showcase.git
+  username: piomin
+  password: ${GITHUB_PAT}
+---
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Warehouse
+metadata:
+  name: basic-demo
+  namespace: basic-demo
+spec:
+  subscriptions:
+    - image:
+        discoveryLimit: 5
+        repoURL: piomin/basic
+---
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Stage
+metadata:
+  name: test
+  namespace: basic-demo
+spec:
+  requestedFreight:
+    - origin:
+        kind: Warehouse
+        name: basic-demo
+      sources:
+        direct: true
+  promotionTemplate:
+    spec:
+      vars:
+        - name: gitRepo
+          value: https://github.com/piomin/argocd-showcase.git
+        - name: imageRepo
+          value: piomin/basic
+      steps:
+        - uses: git-clone
+          config:
+            repoURL: ${{ vars.gitRepo }}
+            checkout:
+              - branch: master
+                path: ./out
+        - uses: helm-update-image
+          as: update-image
+          config:
+            path: ./out/values/values-${{ ctx.stage }}.yaml
+            images:
+              - image: ${{ vars.imageRepo }}
+                key: image.tag
+                value: Tag
+        - uses: git-commit
+          as: commit
+          config:
+            path: ./out
+            messageFromSteps:
+              - update-image
+        - uses: git-push
+          config:
+            path: ./out
+        - uses: argocd-update
+          config:
+            apps:
+              - name: kargo-demo-${{ ctx.stage }}
+                sources:
+                  - repoURL: ${{ vars.gitRepo }}
+                    desiredRevision: ${{ outputs.commit.commit }}
+---
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Stage
+metadata:
+  name: uat
+  namespace: basic-demo
+spec:
+  promotionTemplate:
+    spec:
+      steps:
+        - config:
+            checkout:
+              - branch: master
+                path: ./out
+            repoURL: ${{ vars.gitRepo }}
+          uses: git-clone
+        - config:
+            path: ./out
+          uses: git-clear
+        - as: update-image
+          config:
+            images:
+              - image: ${{ vars.gitRepo }}
+                key: image.tag
+                value: Tag
+            path: ./values/values-${{ ctx.stage }}.yaml
+          uses: helm-update-image
+        - as: commit
+          config:
+            messageFromSteps:
+              - update-image
+            path: ./out
+          uses: git-commit
+        - config:
+            path: ./out
+          uses: git-push
+        - config:
+            apps:
+              - name: kargo-demo-${{ ctx.stage }}
+                sources:
+                  - desiredRevision: ${{ outputs.commit.commit }}
+                    repoURL: ${{ vars.gitRepo }}
+          uses: argocd-update
+      vars:
+        - name: gitRepo
+          value: https://github.com/piomin/argocd-showcase.git
+        - name: imageRepo
+          value: piomin/basic
+  requestedFreight:
+    - origin:
+        kind: Warehouse
+        name: kargo-demo
+      sources:
+        stages:
+          - test
+---
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Stage
+metadata:
+  name: prod
+  namespace: basic-demo
+spec:
+  promotionTemplate:
+    spec:
+      steps:
+        - config:
+            checkout:
+              - branch: master
+                path: ./out
+            repoURL: ${{ vars.gitRepo }}
+          uses: git-clone
+        - config:
+            path: ./out
+          uses: git-clear
+        - as: update-image
+          config:
+            images:
+              - image: ${{ vars.gitRepo }}
+                key: image.tag
+                value: Tag
+            path: ./values/values-${{ ctx.stage }}.yaml
+          uses: helm-update-image
+        - as: commit
+          config:
+            messageFromSteps:
+              - update-image
+            path: ./out
+          uses: git-commit
+        - config:
+            path: ./out
+          uses: git-push
+        - config:
+            apps:
+              - name: kargo-demo-${{ ctx.stage }}
+                sources:
+                  - desiredRevision: ${{ outputs.commit.commit }}
+                    repoURL: ${{ vars.gitRepo }}
+          uses: argocd-update
+      vars:
+        - name: gitRepo
+          value: https://github.com/piomin/argocd-showcase.git
+        - name: imageRepo
+          value: piomin/basic
+  requestedFreight:
+    - origin:
+        kind: Warehouse
+        name: basic-demo
+      sources:
+        stages:
+          - uat
