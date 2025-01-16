@@ -10,13 +10,15 @@ spec:
         repoURL: https://github.com/piomin/argocd-showcase.git
         revision: HEAD
         directories:
-          - path: apps/{{ .Values.appName }}/**
+          {{- range .Values.stages }}
+          - path: apps/{{ $.Values.appName }}/*/{{ .name }}
+          {{- end }}
   template:
     metadata:
-      name: '{{`{{ index .path.segments 2 }}`}}-{{`{{ .path.basename }}`}}-config'
+      name: '{{`{{ index .path.segments 2 }}`}}-{{`{{ index .path.segments 3 }}`}}-config'
     spec:
       destination:
-        namespace: '{{`{{ index .path.segments 2 }}`}}-{{`{{ .path.basename }}`}}'
+        namespace: '{{`{{ index .path.segments 2 }}`}}-{{`{{ index .path.segments 3 }}`}}'
         server: 'https://kubernetes.default.svc'
       project: '{{ .Values.appName }}'
       sources:
@@ -25,7 +27,7 @@ spec:
           targetRevision: 0.3.8
           helm:
             valueFiles:
-              - $values/apps/{{ .Values.appName }}/{{`{{ index .path.segments 2 }}`}}/{{`{{ .path.basename }}`}}/values.yaml
+              - $values/apps/{{ .Values.appName }}/{{`{{ index .path.segments 2 }}`}}/{{`{{ index .path.segments 3 }}`}}/values.yaml
         - repoURL: 'https://github.com/piomin/argocd-showcase.git'
           targetRevision: HEAD
           ref: values
