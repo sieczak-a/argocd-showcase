@@ -1,0 +1,4 @@
+stages:
+  - name: test
+  - name: uat
+  - name: prod

@@ -1,4 +1,6 @@
+{{- range .Values.stages }}
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: {{ .Values.name }}
+  name: {{ .name }}
+{{- end }}

@@ -5,24 +5,17 @@ metadata:
 spec:
   goTemplate: true
   generators:
-    - matrix:
-        generators:
-          - git:
-              repoURL: https://github.com/piomin/argocd-showcase.git
-              revision: HEAD
-              directories:
-                - path: projects/*
-          - list:
-              elements:
-                - env: test
-                - env: uat
-                - env: prod
+    - git:
+        repoURL: https://github.com/piomin/argocd-showcase.git
+        revision: HEAD
+        directories:
+          - path: projects/*
   template:
     metadata:
-      name: '{{.path.basename}}-{{.env}}-config'
+      name: '{{.path.basename}}-config'
     spec:
       destination:
-        namespace: '{{.path.basename}}-{{.env}}'
+        namespace: '{{.path.basename}}'
         server: 'https://kubernetes.default.svc'
       project: default
       sources:
@@ -31,11 +24,10 @@ spec:
           targetRevision: HEAD
           helm:
             valueFiles:
-              - $values/projects/{{.path.basename}}/values-{{.env}}.yaml
               - $values/projects/{{.path.basename}}/values.yaml
             parameters:
-              - name: name
-                value: '{{.path.basename}}-{{.env}}'
+              - name: appName
+                value: '{{.path.basename}}'
         - repoURL: 'https://github.com/piomin/argocd-showcase.git'
           targetRevision: HEAD
           ref: values
