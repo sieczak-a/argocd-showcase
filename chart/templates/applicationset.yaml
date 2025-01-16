@@ -18,7 +18,7 @@ spec:
       name: '{{`{{ index .path.segments 2 }}`}}-{{`{{ index .path.segments 3 }}`}}'
     spec:
       destination:
-        namespace: '{{`{{ index .path.segments 2 }}`}}-{{`{{ index .path.segments 3 }}`}}'
+        namespace: '{{`{{ index .path.segments 1 }}`}}-{{`{{ index .path.segments 3 }}`}}'
         server: 'https://kubernetes.default.svc'
       project: '{{ .Values.appName }}'
       sources:
