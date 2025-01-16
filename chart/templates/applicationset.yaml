@@ -25,7 +25,7 @@ spec:
           targetRevision: 0.3.8
           helm:
             valueFiles:
-              - $values/apps/{{ .Values.appName }}/{{`{{ index .path.segments 0 }}`}}/{{`{{ .path.basename }}`}}/values.yaml
+              - $values/apps/{{ .Values.appName }}/{{`{{ index .path.segments 2 }}`}}/{{`{{ .path.basename }}`}}/values.yaml
         - repoURL: 'https://github.com/piomin/argocd-showcase.git'
           targetRevision: HEAD
           ref: values
