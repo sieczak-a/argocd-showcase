@@ -10,13 +10,13 @@ spec:
         repoURL: https://github.com/piomin/argocd-showcase.git
         revision: HEAD
         directories:
-          - path: apps/{{ .Values.appName }}/*
+          - path: apps/{{ .Values.appName }}/**
   template:
     metadata:
-      name: '{{`{{ index .path.segments 0 }}`}}-{{`{{ .path.basename }}`}}-config'
+      name: '{{`{{ index .path.segments 2 }}`}}-{{`{{ .path.basename }}`}}-config'
     spec:
       destination:
-        namespace: '{{`{{ index .path.segments 0 }}`}}-{{`{{ .path.basename }}`}}'
+        namespace: '{{`{{ index .path.segments 2 }}`}}-{{`{{ .path.basename }}`}}'
         server: 'https://kubernetes.default.svc'
       project: '{{ .Values.appName }}'
       sources:
