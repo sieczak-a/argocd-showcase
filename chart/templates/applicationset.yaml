@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: '{{ .Values.appName }}-config'
+spec:
+  goTemplate: true
+  generators:
+    - git:
+        repoURL: https://github.com/piomin/argocd-showcase.git
+        revision: HEAD
+        directories:
+          - path: apps/{{ .Values.appName }}/*
+  template:
+    metadata:
+      name: '{{`{{ index .path.segments 0 }}`}}-{{`{{ .path.basename }}`}}-config'
+    spec:
+      destination:
+        namespace: '{{`{{ index .path.segments 0 }}`}}-{{`{{ .path.basename }}`}}'
+        server: 'https://kubernetes.default.svc'
+      project: '{{ .Values.appName }}'
+      sources:
+        - path: spring-boot-api-app
+          repoURL: 'https://piomin.github.io/helm-charts/'
+          targetRevision: 0.3.8
+          helm:
+            valueFiles:
+              - $values/apps/{{ .Values.appName }}/{{`{{ index .path.segments 0 }}`}}/{{`{{ .path.basename }}`}}/values.yaml
+        - repoURL: 'https://github.com/piomin/argocd-showcase.git'
+          targetRevision: HEAD
+          ref: values
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
