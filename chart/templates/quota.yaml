@@ -1,4 +1,5 @@
 {{- range .Values.stages }}
+---
 apiVersion: v1
 kind: ResourceQuota
 metadata:
