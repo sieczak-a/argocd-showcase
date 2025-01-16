@@ -15,7 +15,7 @@ spec:
           {{- end }}
   template:
     metadata:
-      name: '{{`{{ index .path.segments 2 }}`}}-{{`{{ index .path.segments 3 }}`}}-config'
+      name: '{{`{{ index .path.segments 2 }}`}}-{{`{{ index .path.segments 3 }}`}}'
     spec:
       destination:
         namespace: '{{`{{ index .path.segments 2 }}`}}-{{`{{ index .path.segments 3 }}`}}'
