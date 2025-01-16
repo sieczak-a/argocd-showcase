@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ResourceQuota
 metadata:
   name: default-quota
-  namespace: {{ .appName }}-{{ .name }}
+  namespace: {{ .Values.appName }}-{{ .name }}
 spec:
   hard:
     {{- if .config }}
