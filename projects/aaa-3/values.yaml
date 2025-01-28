@@ -15,4 +15,6 @@ stages:
               kubernetes.io/service-account.name: pipeline-builder
           type: kubernetes.io/service-account-token
   - name: uat
+    additionalObjects: {}
   - name: prod
+    additionalObjects: {}
