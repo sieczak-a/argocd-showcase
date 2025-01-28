@@ -1,4 +1,29 @@
+global:
+  appName: aaa
+
 stages:
   - name: test
+    additionalObjects:
+      enabled: true
+      list:
+        - kind: Secret
+          apiVersion: v1
+          metadata:
+            name: pipeline-builder-token
+            namespace: default
+            annotations:
+              kubernetes.io/service-account.name: pipeline-builder
+          type: kubernetes.io/service-account-token
   - name: uat
+    additionalObjects: {}
   - name: prod
+    additionalObjects: {}
+
+allowedResources:
+  - group: ''
+    kind: 'Job'
+  - group: ''
+    kind: 'CronJob'
+allowedDestinations:
+  - namespace: '{{ .Values.appName }}-dev'
+    server: 'https://api.ocptst.gas.pgnig.pl:6443'
