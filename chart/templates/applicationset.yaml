@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: '{{ .Values.appName }}-config'
-  namespace: argocd
+  namespace: {{ .Values.argoNamespace | default "argocd" }}
 spec:
   goTemplate: true
   generators:
