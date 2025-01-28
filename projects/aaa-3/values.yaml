@@ -9,11 +9,14 @@ stages:
         - kind: Secret
           apiVersion: v1
           metadata:
-            name: pipeline-builder-token
+            name: sample-secret
             namespace: aaa-3-test
             annotations:
               kubernetes.io/service-account.name: pipeline-builder
-          type: kubernetes.io/service-account-token
+          data:
+            password: MTIzNDU2Cg==
+          type: Opaque
+
   - name: uat
     additionalObjects: {}
   - name: prod
