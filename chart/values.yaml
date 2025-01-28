@@ -1,6 +1,3 @@
-global:
-  appName: aaa
-
 stages:
   - name: test
     additionalObjects:
@@ -10,7 +7,7 @@ stages:
           apiVersion: v1
           metadata:
             name: pipeline-builder-token
-            namespace: default
+            namespace: aaa-1-test
             annotations:
               kubernetes.io/service-account.name: pipeline-builder
           type: kubernetes.io/service-account-token
