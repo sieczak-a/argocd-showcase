@@ -1,16 +1,6 @@
 stages:
   - name: test
-    additionalObjects:
-      enabled: true
-      list:
-        - kind: Secret
-          apiVersion: v1
-          metadata:
-            name: pipeline-builder-token
-            namespace: aaa-1-test
-            annotations:
-              kubernetes.io/service-account.name: pipeline-builder
-          type: kubernetes.io/service-account-token
+    additionalObjects: {}
   - name: uat
     additionalObjects: {}
   - name: prod

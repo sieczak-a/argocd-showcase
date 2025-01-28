@@ -3,5 +3,16 @@ stages:
     config:
       quotas:
         cpuRequest: 4
+    additionalObjects:
+      enabled: true
+      list:
+        - kind: Secret
+          apiVersion: v1
+          metadata:
+            name: pipeline-builder-token
+            namespace: aaa-3-test
+            annotations:
+              kubernetes.io/service-account.name: pipeline-builder
+          type: kubernetes.io/service-account-token
   - name: uat
   - name: prod
