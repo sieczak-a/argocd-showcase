@@ -1,0 +1,20 @@
+global:
+  compatibility:
+    openshift:
+      adaptSecurityContext: force
+
+image:
+  tag: 1-54
+  registry: registry.redhat.io
+  repository: rhel9/postgresql-15
+
+primary:
+  containerSecurityContext:
+    readOnlyRootFilesystem: false
+  persistence:
+    mountPath: /var/lib/pgsql
+  extraEnvVars:
+    - name: POSTGRESQL_ADMIN_PASSWORD
+      value: postgresql123
+
+postgresqlDataDir: /var/lib/pgsql/data

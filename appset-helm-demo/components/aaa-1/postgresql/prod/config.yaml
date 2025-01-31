@@ -1,0 +1,4 @@
+chart:
+  repository: https://charts.bitnami.com/bitnami
+  name: postgresql
+  version: 15.5.38

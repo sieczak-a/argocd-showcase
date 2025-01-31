@@ -9,7 +9,7 @@ spec:
         repoURL: https://github.com/piomin/argocd-showcase.git
         revision: HEAD
         directories:
-          - path: projects/*
+          - path: appset-helm-demo/projects/*
   template:
     metadata:
       name: '{{.path.basename}}-config'
@@ -19,12 +19,12 @@ spec:
         server: 'https://kubernetes.default.svc'
       project: default
       sources:
-        - path: chart
+        - path: appset-helm-demo/chart
           repoURL: 'https://github.com/piomin/argocd-showcase.git'
           targetRevision: HEAD
           helm:
             valueFiles:
-              - $values/projects/{{.path.basename}}/values.yaml
+              - $values/appset-helm-demo/projects/{{.path.basename}}/values.yaml
             parameters:
               - name: appName
                 value: '{{.path.basename}}'

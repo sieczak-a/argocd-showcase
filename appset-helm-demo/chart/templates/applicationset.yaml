@@ -1,0 +1,75 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: '{{ .Values.appName }}-config'
+  namespace: {{ .Values.argoNamespace | default "argocd" }}
+spec:
+  goTemplate: true
+  generators:
+    - git:
+        repoURL: https://github.com/piomin/argocd-showcase.git
+        revision: HEAD
+        directories:
+          {{- range .Values.stages }}
+          - path: appset-helm-demo/apps/{{ $.Values.appName }}/*/{{ .name }}
+          {{- end }}
+  template:
+    metadata:
+      name: '{{`{{ index .path.segments 3 }}`}}-{{`{{ index .path.segments 4 }}`}}'
+    spec:
+      destination:
+        namespace: '{{`{{ index .path.segments 2 }}`}}-{{`{{ index .path.segments 4 }}`}}'
+        server: 'https://kubernetes.default.svc'
+      project: '{{ .Values.appName }}'
+      sources:
+        - chart: spring-boot-api-app
+          repoURL: 'https://piomin.github.io/helm-charts/'
+          targetRevision: 0.3.8
+          helm:
+            valueFiles:
+              - $values/appset-helm-demo/apps/{{ .Values.appName }}/{{`{{ index .path.segments 3 }}`}}/{{`{{ index .path.segments 4 }}`}}/values.yaml
+        - repoURL: 'https://github.com/piomin/argocd-showcase.git'
+          targetRevision: HEAD
+          ref: values
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: '{{ .Values.appName }}-components-config'
+  namespace: {{ .Values.argoNamespace | default "argocd" }}
+spec:
+  goTemplate: true
+  generators:
+    - git:
+        repoURL: https://github.com/piomin/argocd-showcase.git
+        revision: HEAD
+        files:
+          {{- range .Values.stages }}
+          - path: appset-helm-demo/components/{{ $.Values.appName }}/*/{{ .name }}/config.json
+          {{- end }}
+  template:
+    metadata:
+      name: '{{`{{ index .path.segments 3 }}`}}-{{`{{ index .path.segments 4 }}`}}'
+    spec:
+      destination:
+        namespace: '{{`{{ index .path.segments 2 }}`}}-{{`{{ index .path.segments 4 }}`}}'
+        server: 'https://kubernetes.default.svc'
+      project: '{{ .Values.appName }}'
+      sources:
+        - chart: {{ .chart.name }}
+          repoURL: {{ .chart.repository }}
+          targetRevision: {{ .chart.version }}
+          helm:
+            valueFiles:
+              - $values/appset-helm-demo/apps/{{ .Values.appName }}/{{`{{ index .path.segments 3 }}`}}/{{`{{ index .path.segments 4 }}`}}/values.yaml
+        - repoURL: 'https://github.com/piomin/argocd-showcase.git'
+          targetRevision: HEAD
+          ref: values
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
