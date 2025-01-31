@@ -65,7 +65,7 @@ spec:
           targetRevision: '{{`{{ .chart.version }}`}}'
           helm:
             valueFiles:
-              - $values/appset-helm-demo/apps/{{ .Values.appName }}/{{`{{ index .path.segments 3 }}`}}/{{`{{ index .path.segments 4 }}`}}/values.yaml
+              - $values/appset-helm-demo/components/{{ .Values.appName }}/{{`{{ index .path.segments 3 }}`}}/{{`{{ index .path.segments 4 }}`}}/values.yaml
         - repoURL: 'https://github.com/piomin/argocd-showcase.git'
           targetRevision: HEAD
           ref: values
