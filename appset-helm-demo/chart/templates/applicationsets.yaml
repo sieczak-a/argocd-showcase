@@ -60,9 +60,9 @@ spec:
         server: 'https://kubernetes.default.svc'
       project: '{{ .Values.appName }}'
       sources:
-        - chart: {{ .chart.name }}
-          repoURL: {{ .chart.repository }}
-          targetRevision: {{ .chart.version }}
+        - chart: '{{`{{ .chart.name }}`}}'
+          repoURL: '{{`{{ .chart.repository }}`}}'
+          targetRevision: '{{`{{ .chart.version }}`}}'
           helm:
             valueFiles:
               - $values/appset-helm-demo/apps/{{ .Values.appName }}/{{`{{ index .path.segments 3 }}`}}/{{`{{ index .path.segments 4 }}`}}/values.yaml
