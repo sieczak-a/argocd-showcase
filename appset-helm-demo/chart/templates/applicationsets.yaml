@@ -49,7 +49,7 @@ spec:
         revision: HEAD
         files:
           {{- range .Values.stages }}
-          - path: appset-helm-demo/components/{{ $.Values.appName }}/*/{{ .name }}/config.json
+          - path: appset-helm-demo/components/{{ $.Values.appName }}/*/{{ .name }}/config.yaml
           {{- end }}
   template:
     metadata:

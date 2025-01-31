@@ -28,6 +28,9 @@ spec:
             parameters:
               - name: appName
                 value: '{{.path.basename}}'
+                # enable for OpenShift GitOps
+              - name: argoNamespace
+                value: openshift-gitops
         - repoURL: 'https://github.com/piomin/argocd-showcase.git'
           targetRevision: HEAD
           ref: values
