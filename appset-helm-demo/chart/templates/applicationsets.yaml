@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: '{{ .Values.appName }}-config'
+  name: '{{ .Values.projectName }}-config'
   namespace: {{ .Values.argoNamespace | default "argocd" }}
 spec:
   goTemplate: true
@@ -11,7 +11,7 @@ spec:
         revision: HEAD
         directories:
           {{- range .Values.stages }}
-          - path: appset-helm-demo/apps/{{ $.Values.appName }}/*/{{ .name }}
+          - path: appset-helm-demo/apps/{{ $.Values.projectName }}/*/{{ .name }}
           {{- end }}
   template:
     metadata:
@@ -20,17 +20,17 @@ spec:
       destination:
         namespace: '{{`{{ index .path.segments 2 }}`}}-{{`{{ index .path.segments 4 }}`}}'
         server: 'https://kubernetes.default.svc'
-      project: '{{ .Values.appName }}'
+      project: '{{ .Values.projectName }}'
       sources:
         - chart: spring-boot-api-app
           repoURL: 'https://piomin.github.io/helm-charts/'
           targetRevision: 0.3.8
           helm:
             valueFiles:
-              - $values/appset-helm-demo/apps/{{ .Values.appName }}/{{`{{ index .path.segments 3 }}`}}/{{`{{ index .path.segments 4 }}`}}/values.yaml
+              - $values/appset-helm-demo/apps/{{ .Values.projectName }}/{{`{{ index .path.segments 3 }}`}}/{{`{{ index .path.segments 4 }}`}}/values.yaml
             parameters:
               - name: appName
-                value: '{{ .Values.appName }}'
+                value: '{{ .Values.projectName }}'
         - repoURL: 'https://github.com/piomin/argocd-showcase.git'
           targetRevision: HEAD
           ref: values
@@ -42,7 +42,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: '{{ .Values.appName }}-components-config'
+  name: '{{ .Values.projectName }}-components-config'
   namespace: {{ .Values.argoNamespace | default "argocd" }}
 spec:
   goTemplate: true
@@ -52,7 +52,7 @@ spec:
         revision: HEAD
         files:
           {{- range .Values.stages }}
-          - path: appset-helm-demo/components/{{ $.Values.appName }}/*/{{ .name }}/config.yaml
+          - path: appset-helm-demo/components/{{ $.Values.projectName }}/*/{{ .name }}/config.yaml
           {{- end }}
   template:
     metadata:
@@ -61,17 +61,17 @@ spec:
       destination:
         namespace: '{{`{{ index .path.segments 2 }}`}}-{{`{{ index .path.segments 4 }}`}}'
         server: 'https://kubernetes.default.svc'
-      project: '{{ .Values.appName }}'
+      project: '{{ .Values.projectName }}'
       sources:
         - chart: '{{`{{ .chart.name }}`}}'
           repoURL: '{{`{{ .chart.repository }}`}}'
           targetRevision: '{{`{{ .chart.version }}`}}'
           helm:
             valueFiles:
-              - $values/appset-helm-demo/components/{{ .Values.appName }}/{{`{{ index .path.segments 3 }}`}}/{{`{{ index .path.segments 4 }}`}}/values.yaml
+              - $values/appset-helm-demo/components/{{ .Values.projectName }}/{{`{{ index .path.segments 3 }}`}}/{{`{{ index .path.segments 4 }}`}}/values.yaml
             parameters:
               - name: appName
-                value: '{{ .Values.appName }}'
+                value: '{{ .Values.projectName }}'
         - repoURL: 'https://github.com/piomin/argocd-showcase.git'
           targetRevision: HEAD
           ref: values

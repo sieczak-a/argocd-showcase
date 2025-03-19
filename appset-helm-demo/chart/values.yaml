@@ -5,12 +5,3 @@ stages:
     additionalObjects: {}
   - name: prod
     additionalObjects: {}
-
-allowedResources:
-  - group: ''
-    kind: 'Job'
-  - group: ''
-    kind: 'CronJob'
-allowedDestinations:
-  - namespace: '{{ .Values.appName }}-dev'
-    server: 'https://api.ocptst.gas.pgnig.pl:6443'
