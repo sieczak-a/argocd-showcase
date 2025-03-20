@@ -46,3 +46,8 @@ spec:
           prune: true
           selfHeal: true
 ```
+
+## Articles
+
+1. It shows how to use the **Kargo** tool to continuously promote application images between environments. Go to the `kargo` directory in the repo for the example. A detailed guide may be found in the following article: [Continuous Promotion on Kubernetes with GitOps](https://piotrminkowski.com/2025/01/14/continuous-promotion-on-kubernetes-with-gitops/)
+2. It shows how to use Helm with Argo CD Application Set Git Files and Directory Generators to install many applications in the cluster in the standardized way. Go to the `appset-helm-demo` directory in the repo for the example. A detailed guide may be found in the following article: [The Art of Argo CD ApplicationSet Generators with Kubernetes](https://piotrminkowski.com/2025/03/20/the-art-of-argo-cd-applicationset-generators-with-kubernetes/)
