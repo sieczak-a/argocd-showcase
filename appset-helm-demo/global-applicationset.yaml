@@ -6,7 +6,7 @@ spec:
   goTemplate: true
   generators:
     - git:
-        repoURL: https://github.com/piomin/argocd-showcase.git
+        repoURL: https://github.com/sieczak-a/argocd-showcase.git
         revision: HEAD
         directories:
           - path: appset-helm-demo/projects/*
@@ -20,7 +20,7 @@ spec:
       project: default
       sources:
         - path: appset-helm-demo/chart
-          repoURL: 'https://github.com/piomin/argocd-showcase.git'
+          repoURL: 'https://github.com/sieczak-a/argocd-showcase.git'
           targetRevision: HEAD
           helm:
             valueFiles:
@@ -31,13 +31,16 @@ spec:
                 # enable for OpenShift GitOps
 #              - name: argoNamespace
 #                value: openshift-gitops
-        - repoURL: 'https://github.com/piomin/argocd-showcase.git'
+        - repoURL: 'https://github.com/sieczak-a/argocd-showcase.git'
           targetRevision: HEAD
           ref: values
       syncPolicy:
         automated:
           prune: true
-          selfHeal: trueapiVersion: argoproj.io/v1alpha1
+          selfHeal: true
+
+---          
+apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: global-config
@@ -45,7 +48,7 @@ spec:
   goTemplate: true
   generators:
     - git:
-        repoURL: https://github.com/piomin/argocd-showcase.git
+        repoURL: https://github.com/sieczak-a/argocd-showcase.git
         revision: HEAD
         directories:
           - path: appset-helm-demo/projects/*
@@ -59,7 +62,7 @@ spec:
       project: default
       sources:
         - path: appset-helm-demo/chart
-          repoURL: 'https://github.com/piomin/argocd-showcase.git'
+          repoURL: 'https://github.com/sieczak-a/argocd-showcase.git'
           targetRevision: HEAD
           helm:
             valueFiles:
@@ -70,7 +73,7 @@ spec:
                 # enable for OpenShift GitOps
 #              - name: argoNamespace
 #                value: openshift-gitops
-        - repoURL: 'https://github.com/piomin/argocd-showcase.git'
+        - repoURL: 'https://github.com/sieczak-a/argocd-showcase.git'
           targetRevision: HEAD
           ref: values
       syncPolicy:

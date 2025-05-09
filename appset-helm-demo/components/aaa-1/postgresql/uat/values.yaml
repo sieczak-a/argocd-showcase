@@ -4,9 +4,9 @@ global:
       adaptSecurityContext: force
 
 image:
-  tag: 1-54
-  registry: registry.redhat.io
-  repository: rhel9/postgresql-15
+  registry: docker.io
+  repository: bitnami/postgresql
+  tag: 17.5.0-debian-12-r0
 
 primary:
   containerSecurityContext:
