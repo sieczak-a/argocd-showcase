@@ -7,7 +7,7 @@ spec:
   goTemplate: true
   generators:
     - git:
-        repoURL: https://github.com/piomin/argocd-showcase.git
+        repoURL: https://github.com/sieczak-a/argocd-showcase.git
         revision: HEAD
         directories:
           {{- range .Values.stages }}
@@ -23,7 +23,7 @@ spec:
       project: '{{ .Values.projectName }}'
       sources:
         - chart: spring-boot-api-app
-          repoURL: 'https://piomin.github.io/helm-charts/'
+          repoURL: 'https://sieczak-a.github.io/helm-charts/'
           targetRevision: 0.3.8
           helm:
             valueFiles:
@@ -31,7 +31,7 @@ spec:
             parameters:
               - name: appName
                 value: '{{ .Values.projectName }}'
-        - repoURL: 'https://github.com/piomin/argocd-showcase.git'
+        - repoURL: 'https://github.com/sieczak-a/argocd-showcase.git'
           targetRevision: HEAD
           ref: values
       syncPolicy:
@@ -48,7 +48,7 @@ spec:
   goTemplate: true
   generators:
     - git:
-        repoURL: https://github.com/piomin/argocd-showcase.git
+        repoURL: https://github.com/sieczak-a/argocd-showcase.git
         revision: HEAD
         files:
           {{- range .Values.stages }}
@@ -72,7 +72,7 @@ spec:
             parameters:
               - name: appName
                 value: '{{ .Values.projectName }}'
-        - repoURL: 'https://github.com/piomin/argocd-showcase.git'
+        - repoURL: 'https://github.com/sieczak-a/argocd-showcase.git'
           targetRevision: HEAD
           ref: values
       syncPolicy:
